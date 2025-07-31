@@ -12,11 +12,11 @@
             <h1>Nightreign マップパターン特定ツール</h1>
         </header>
 
-        <!-- (STEP1, 2は変更なし) -->
         <section id="step1-boss-selection" class="step active">
             <h2>STEP 1: ボスを選択してください</h2>
             <div id="boss-icons" class="icon-grid"></div>
         </section>
+
         <section id="step2-cataclysm-selection" class="step">
             <div class="step-header">
                 <h2>STEP 2: 地変を選択してください</h2>
@@ -25,7 +25,6 @@
             <div id="cataclysm-icons" class="icon-grid"></div>
         </section>
 
-        <!-- STEP3に調整モード用のUIを追加 -->
         <section id="step3-spawn-selection" class="step">
             <div class="step-header">
                 <h2>STEP 3: マップ上のリスポーン位置を選択してください</h2>
@@ -36,7 +35,6 @@
             </div>
         </section>
 
-        <!-- (STEP4, 5, footerは変更なし) -->
         <section id="step4-location-selection" class="step">
             <div class="step-header">
                 <h2>STEP 4: 拠点の組み合わせを選択してください</h2>
@@ -44,6 +42,7 @@
             </div>
             <div id="location-options"></div>
         </section>
+
         <section id="step5-result" class="step">
             <h2>特定されたマップ</h2>
             <div id="result-map-container">
@@ -51,14 +50,15 @@
             </div>
             <div class="result-info">
                 <p id="result-filename"></p>
+                <p id="result-memo" class="memo-box"></p>
                 <button id="reset-button">最初からやり直す</button>
             </div>
         </section>
+        
         <footer>
-            <p>マップデータ準備・監修: [ここにお客様のお名前やIDなど]</p>
+            <p>マップデータ準備・監修: [お客様のお名前やID]</p>
         </footer>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
