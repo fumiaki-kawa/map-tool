@@ -4,22 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const BOSSES = ["アデレ", "カリゴ", "フレゴール", "グラディウス", "グノスター", "ナメレス", "リブラ", "マリス"];
     const CATACLYSMS = ["なし", "ノクラテオ", "火口", "山嶺", "腐れ森"];
     
-    // お客様が最終的に調整した値をここに反映させる
+    // ★★★ お客様が調整した最終的な座標データ ★★★
     const SPAWN_POINTS_COORDS = {
-    1: { top: '38.6%', left: '19.9%' },
-    2: { top: '58.5%', left: '20.8%' },
-    3: { top: '72.0%', left: '21.3%' },
-    4: { top: '39.5%', left: '36.0%' },
-    5: { top: '64.8%', left: '52.8%' },
-    6: { top: '80.8%', left: '55.6%' },
-    7: { top: '22.5%', left: '54.3%' },
-    8: { top: '37.0%', left: '65.8%' },
-    9: { top: '53.5%', left: '77.1%' },
-};
+        1: { top: '38.6%', left: '19.9%' },
+        2: { top: '58.5%', left: '20.8%' },
+        3: { top: '72.0%', left: '21.3%' },
+        4: { top: '39.5%', left: '36.0%' },
+        5: { top: '64.8%', left: '52.8%' },
+        6: { top: '80.8%', left: '55.6%' },
+        7: { top: '22.5%', left: '54.3%' },
+        8: { top: '37.0%', left: '65.8%' },
+        9: { top: '53.5%', left: '77.1%' }
+    };
 
-    // --- DOM要素の取得 ---
+    // ★★★ お客様が完成させた全ファイル名リスト ★★★
+    const ALL_MAP_FILES = [
+        "リブラ_ノクラテオ_6_小砦無・遺跡氷_result.png", "リブラ_ノクラテオ_8_小砦無・野営地無_result.png", "リブラ_火口_2_遺跡眠・塔_result.png", "リブラ_火口_5_小砦魔・塔魔_result.png", "リブラ_火口_6_小砦無・聖堂無_result.png", "リブラ_火口_6_野営地雷・塔_result.png", "リブラ_火口_9_野営地炎・遺跡毒_result.png", "リブラ_山嶺_8_遺跡眠・小砦無_result.png", "リブラ_山嶺_8_小砦無・野営地発狂_result.png", "リブラ_山嶺_8_野営地炎・遺跡毒_result.png", "リブラ_山嶺_8_野営地発狂・小砦魔_result.png", "リブラ_山嶺_9_遺跡毒・小砦無_result.png", "リブラ_腐れ森_1_野営地雷・聖堂無_result.png", "リブラ_腐れ森_3_遺跡眠・聖堂炎_result.png", "リブラ_腐れ森_3_聖堂無・遺跡血_result.png", "リブラ_腐れ森_7_遺跡眠・聖堂炎_result.png", "リブラ_腐れ森_8_野営地無・聖堂聖_result.png", "アデレ_なし_1_聖堂無・小砦無_result.png", "アデレ_なし_1_野営地無・遺跡雷_result.png", "アデレ_なし_2_聖堂無・野営地炎_result.png", "アデレ_なし_2_野営地無・遺跡毒_result.png", "アデレ_なし_3_聖堂炎・野営地炎_result.png", "アデレ_なし_3_野営地無・遺跡血_result.png", "アデレ_なし_4_遺跡氷・小砦魔_result.png", "アデレ_なし_4_遺跡眠・遺跡毒_result.png", "アデレ_なし_5_遺跡雷・聖堂無_result.png", "アデレ_なし_6_遺跡無・野営地無_result.png", "アデレ_なし_6_聖堂聖・遺跡氷_result.png", "アデレ_なし_6_野営地発狂・遺跡魔_result.png", "アデレ_なし_7_遺跡氷・聖堂無_result.png", "アデレ_なし_7_野営地無・聖堂無_result.png", "アデレ_なし_8_遺跡死・野営地発狂_result.png", "アデレ_なし_8_遺跡氷・遺跡聖_result.png", "アデレ_なし_8_野営地発狂・聖堂無_result.png", "アデレ_なし_9_遺跡毒・遺跡毒_result.png", "アデレ_なし_9_遺跡毒・小砦魔_result.png", "アデレ_なし_9_野営地無・無_result.png", "アデレ_ノクラテオ_1_遺跡毒・聖堂無_result.png", "アデレ_ノクラテオ_6_遺跡氷・遺跡死_result.png", "アデレ_ノクラテオ_7_小砦無・聖堂炎_result.png", "アデレ_ノクラテオ_7_野営地炎・聖堂無_result.png", "アデレ_ノクラテオ_9_野営地無・遺跡聖_result.png", "アデレ_火口_3_遺跡氷・聖堂無_result.png", "アデレ_火口_5_遺跡魔・塔_result.png", "アデレ_火口_5_野営地無・塔無_result.png", "アデレ_火口_6_遺跡無・聖堂無_result.png", "アデレ_火口_8_野営地無・聖堂炎_result.png", "アデレ_山嶺_3_聖堂無・野営地雷_result.png", "アデレ_山嶺_5_遺跡氷・小砦魔_result.png", "アデレ_山嶺_8_聖堂無・遺跡眠_result.png", "アデレ_山嶺_8_野営地無・遺跡魔_result.png", "アデレ_山嶺_9_遺跡血・小砦魔_result.png", "アデレ_腐れ森_2_小砦無・遺跡氷_result.png", "アデレ_腐れ森_2_野営地無・小砦無_result.png", "アデレ_腐れ森_4_聖堂無・小砦魔_result.png", "アデレ_腐れ森_8_野営地炎・小砦無_result.png", "アデレ_腐れ森_8_野営地無・遺跡聖_result.png", "カリゴ_なし_1_野営地雷・小砦無・左教会_result.png", "カリゴ_なし_1_野営地雷・小砦無・左塔_result.png", "カリゴ_なし_2_野営地氷・野営地無_result.png", "カリゴ_なし_2_野営地無・聖堂無_result.png", "カリゴ_なし_3_遺跡血・小砦魔_result.png", "カリゴ_なし_3_野営地炎・小砦無_result.png", "カリゴ_なし_3_野営地雷・小砦無_result.png", "カリゴ_なし_4_小砦無・野営地聖_result.png", "カリゴ_なし_4_野営地無・小砦魔_result.png", "カリゴ_なし_5_遺跡眠・遺跡雷_result.png", "カリゴ_なし_5_聖堂聖・小砦無_result.png", "カリゴ_なし_5_野営地発狂・遺跡眠_result.png", "カリゴ_なし_5_野営地無・野営地無_result.png", "カリゴ_なし_6_小砦魔・遺跡聖_result.png", "カリゴ_なし_7_小砦魔・聖堂無_result.png", "カリゴ_なし_7_小砦無・聖堂聖_result.png", "カリゴ_なし_8_野営地無・聖堂無_result.png", "カリゴ_なし_9_遺跡雷・遺跡死_result.png", "カリゴ_なし_9_聖堂炎・野営地無_result.png", "カリゴ_なし_9_聖堂無・野営地無_result.png", "カリゴ_ノクラテオ_1_小砦無・遺跡血_result.png", "カリゴ_ノクラテオ_5_聖堂無・遺跡死_result.png", "カリゴ_ノクラテオ_7_野営地雷・聖堂無_result.png", "カリゴ_ノクラテオ_9_遺跡死・聖堂無_result.png", "カリゴ_ノクラテオ_9_野営地死・聖堂無_result.png", "カリゴ_火口_1_遺跡毒_result.png", "カリゴ_火口_1_遺跡無・野営地発狂_result.png", "カリゴ_火口_1_野営地炎・野営地無_result.png", "カリゴ_火口_2_聖堂聖・塔_result.png", "カリゴ_火口_8_小砦無・小砦魔_result.png", "カリゴ_山嶺_5_遺跡無・野営地無_result.png", "カリゴ_山嶺_7_野営地無・聖堂聖_result.png", "カリゴ_山嶺_8_聖堂炎・小砦無_result.png", "カリゴ_山嶺_9_遺跡血・聖堂無_result.png", "カリゴ_山嶺_9_遺跡聖・小砦無_result.png", "カリゴ_腐れ森_1_野営地雷・遺跡死_result.png", "カリゴ_腐れ森_2_野営地無・遺跡氷_result.png", "カリゴ_腐れ森_4_聖堂無・野営地無_result.png", "カリゴ_腐れ森_4_野営地無・小砦魔_result.png", "カリゴ_腐れ森_7_野営地発狂・聖堂無_result.png", "グノスター_なし_1_遺跡雷・野営地雷_result.png", "グノスター_なし_2_遺跡毒・野営地炎_result.png", "グノスター_なし_2_野営地炎・遺跡無_result.png", "グノスター_なし_3_遺跡無・野営地雷_result.png", "グノスター_なし_4_聖堂炎・小砦魔_result.png", "グノスター_なし_4_野営地雷・遺跡無_result.png", "グノスター_なし_5_遺跡氷・野営地雷_result.png", "グノスター_なし_5_聖堂炎・遺跡聖_result.png", "グノスター_なし_5_野営地無・小砦無_result.png", "グノスター_なし_6_小砦魔・野営地炎_result.png", "グノスター_なし_6_聖堂無・遺跡魔_result.png", "グノスター_なし_6_野営地炎・聖堂炎_result.png", "グノスター_なし_7_野営地雷・聖堂無_result.png", "グノスター_なし_8_遺跡毒・聖堂聖_result.png", "グノスター_なし_8_遺跡眠・遺跡無_result.png", "グノスター_なし_8_小砦無・遺跡毒_result.png", "グノスター_なし_8_野営地炎・聖堂聖_result.png", "グノスター_なし_9_遺跡氷・聖堂炎_result.png", "グノスター_なし_9_遺跡氷・野営地無_result.png", "グノスター_なし_9_遺跡眠・遺跡死_result.png", "グノスター_ノクラテオ_1_遺跡氷・野営地炎_result.png", "グノスター_ノクラテオ_5_遺跡無・聖堂炎_result.png", "グノスター_ノクラテオ_6_聖堂炎・野営地無_result.png", "グノスター_ノクラテオ_8_聖堂聖・遺跡氷_result.png", "グノスター_ノクラテオ_8_野営地無・小砦無_result.png", "グノスター_火口_1_野営地・塔炎_result.png", "グノスター_火口_2_野営地雷・小砦無_result.png", "グノスター_火口_8_遺跡魔・聖堂無_result.png", "グノスター_火口_9_聖堂無・聖堂聖_result.png", "グノスター_火口_9_野営地無・塔_result.png", "グノスター_山嶺_5_野営地無・遺跡雷_result.png", "グノスター_山嶺_8_野営地無・聖堂無_result.png", "グノスター_山嶺_9_遺跡死・野営地炎_result.png", "グノスター_山嶺_9_遺跡氷・聖堂炎_result.png", "グノスター_山嶺_9_野営地雷・小砦無_result.png", "グノスター_腐れ森_1_小砦無・野営地炎_result.png", "グノスター_腐れ森_3_遺跡眠・聖堂無_result.png", "グノスター_腐れ森_3_聖堂無・野営地無_result.png", "グノスター_腐れ森_7_野営地炎・小砦無_result.png", "グノスター_腐れ森_7_野営地無・小砦無_result.png", "グラディウス_なし_1_遺跡死・遺跡毒_result.png", "グラディウス_なし_2_遺跡毒・遺跡氷_result.png", "グラディウス_なし_2_小砦無・聖堂聖_result.png", "グラディウス_なし_3_遺跡毒・遺跡氷_result.png", "グラディウス_なし_3_小砦無・遺跡死_result.png", "グラディウス_なし_3_野営地炎・野営地炎_result.png", "グラディウス_なし_3_野営地炎・野営地炎・教会スタート_result.png", "グラディウス_なし_4_遺跡魔・遺跡魔_result.png", "グラディウス_なし_4_野営地炎・遺跡炎_result.png", "グラディウス_なし_4_野営地雷・野営地発狂_result.png", "グラディウス_なし_5_遺跡無・野営地無_result.png", "グラディウス_なし_5_聖堂無・野営地無_result.png", "グラディウス_なし_5_聖堂無・野営地雷_result.png", "グラディウス_なし_6_遺跡血・小砦魔_result.png", "グラディウス_なし_7_小砦無・聖堂炎_result.png", "グラディウス_なし_7_野営地雷・小砦魔_result.png", "グラディウス_なし_8_遺跡毒・遺跡毒_result.png", "グラディウス_なし_8_野営地無・聖堂無_result.png", "グラディウス_なし_9_聖堂聖・野営地無_result.png", "グラディウス_なし_9_野営地炎・遺跡死_result.png", "グラディウス_ノクラテオ_4_聖堂聖・野営地炎_result.png", "グラディウス_ノクラテオ_5_野営地発狂・聖堂炎_result.png", "グラディウス_ノクラテオ_5_野営地雷・遺跡魔_result.png", "グラディウス_ノクラテオ_7_野営地無・小砦無_result.png", "グラディウス_ノクラテオ_9_野営地無・小砦無_result.png", "グラディウス_火口_1_遺跡聖・遺跡雷_result.png", "グラディウス_火口_1_遺跡無・聖堂炎_result.png", "グラディウス_火口_3_野営地無・遺跡死_result.png", "グラディウス_火口_5_小砦無・野営地無_result.png", "グラディウス_火口_6_小砦無・塔_result.png", "グラディウス_山嶺_2_聖堂聖・小砦無_result.png", "グラディウス_山嶺_6_遺跡血・聖堂無_result.png", "グラディウス_山嶺_8_遺跡無・小砦無_result.png", "グラディウス_山嶺_8_小砦魔・聖堂無_result.png", "グラディウス_山嶺_8_野営地死・野営地無_result.png", "グラディウス_腐れ森_1_遺跡雷・聖堂無_result.png", "グラディウス_腐れ森_2_野営地無・遺跡雷_result.png", "グラディウス_腐れ森_8_遺跡魔・小砦無_result.png", "グラディウス_腐れ森_8_小砦無・野営地無_result.png", "グラディウス_腐れ森_8_野営地発狂・遺跡眠_result.png", "ナメレス_なし_1_遺跡雷・遺跡雷_result.png", "ナメレス_なし_1_聖堂炎・小砦無_result.png", "ナメレス_なし_2_遺跡氷・遺跡氷_result.png", "ナメレス_なし_2_野営地発狂・遺跡毒_result.png", "ナメレス_なし_3_遺跡魔・小砦無_result.png", "ナメレス_なし_3_遺跡雷・野営地発狂_result.png", "ナメレス_なし_3_聖堂無・小砦無_result.png", "ナメレス_なし_4_小砦無・野営地炎_result.png", "ナメレス_なし_4_聖堂聖・野営地無_result.png", "ナメレス_なし_5_遺跡聖・聖堂炎_result.png", "ナメレス_なし_5_小砦無・野営地炎_result.png", "ナメレス_なし_5_野営地無・聖堂炎_result.png", "ナメレス_なし_6_野営地炎・遺跡氷_result.png", "ナメレス_なし_7_遺跡毒・小砦無_result.png", "ナメレス_なし_7_小砦無・聖堂無_result.png", "ナメレス_なし_7_聖堂聖・小砦無_result.png", "ナメレス_なし_7_聖堂眠・小砦無_result.png", "ナメレス_なし_8_野営地無・遺跡血_result.png", "ナメレス_なし_9_小砦無・聖堂聖_result.png", "ナメレス_なし_9_野営地無・野営地無_result.png", "ナメレス_ノクラテオ_7_遺跡無・小砦無_result.png", "ナメレス_ノクラテオ_8_小砦無・遺跡聖_result.png", "ナメレス_ノクラテオ_8_聖堂炎・小砦無_result.png", "ナメレス_ノクラテオ_9_遺跡魔・野営地無_result.png", "ナメレス_ノクラテオ_9_野営地無・聖堂聖_result.png", "ナメレス_火口_1_遺跡魔・小砦無_result.png", "ナメレス_火口_3_小砦無・塔_result.png", "ナメレス_火口_5_遺跡氷・野営地発狂_result.png", "ナメレス_火口_6_遺跡無・遺跡無_result.png", "ナメレス_火口_8_野営地無・小砦無_result.png", "ナメレス_山嶺_6_遺跡雷・野営地無_result.png", "ナメレス_山嶺_6_小砦無・野営地発狂_result.png", "ナメレス_山嶺_6_野営地発狂・聖堂無_result.png", "ナメレス_山嶺_7_聖堂無・小砦魔_result.png", "ナメレス_山嶺_8_小砦無・遺跡眠_result.png", "ナメレス_腐れ森_1_遺跡死・野営地雷_result.png", "ナメレス_腐れ森_1_遺跡雷・遺跡雷_result.png", "ナメレス_腐れ森_2_遺跡雷・野営地無_result.png", "ナメレス_腐れ森_7_野営地無・聖堂無_result.png", "ナメレス_腐れ森_8_小砦無・野営地発狂_result.png", "フレゴール_なし_1_遺跡眠・遺跡眠_result.png", "フレゴール_なし_1_遺跡無・小砦無_result.png", "フレゴール_なし_2_遺跡氷・遺跡氷_result.png", "フレゴール_なし_2_野営地雷・遺跡無_result.png", "フレゴール_なし_3_遺跡魔・聖堂聖_result.png", "フレゴール_なし_3_小砦無・遺跡眠_result.png", "フレゴール_なし_3_聖堂聖・小砦無_result.png", "フレゴール_なし_3_野営地無・遺跡眠_result.png", "フレゴール_なし_4_遺跡毒・遺跡毒_result.png", "フレゴール_なし_4_遺跡毒・野営地炎_result.png", "フレゴール_なし_6_遺跡血・聖堂聖_result.png", "フレゴール_なし_6_遺跡眠・小砦無_result.png", "フレゴール_なし_6_野営地無・遺跡魔_result.png", "フレゴール_なし_6_野営地無・遺跡雷_result.png", "フレゴール_なし_7_遺跡眠・小砦無_result.png", "フレゴール_なし_8_小砦無・遺跡死_result.png", "フレゴール_なし_8_野営地炎・聖堂聖_result.png", "フレゴール_なし_8_野営地無・遺跡氷_result.png", "フレゴール_なし_9_小砦魔・遺跡血_result.png", "フレゴール_なし_9_野営地無・遺跡氷_result.png", "フレゴール_ノクラテオ_1_小砦魔・聖堂無_result.png", "フレゴール_ノクラテオ_1_野営地無・遺跡雷_result.png", "フレゴール_ノクラテオ_5_遺跡魔・遺跡血_result.png", "フレゴール_ノクラテオ_5_遺跡雷・野営地炎_result.png", "フレゴール_ノクラテオ_5_野営地雷・野営地無_result.png", "フレゴール_火口_1_小砦魔・遺跡雷_result.png", "フレゴール_火口_2_遺跡氷・遺跡無_result.png", "フレゴール_火口_3_小砦魔・遺跡無_result.png", "フレゴール_火口_3_野営地発狂・塔_result.png", "フレゴール_火口_8_遺跡毒・野営地無_result.png", "フレゴール_山嶺_2_小砦無・遺跡聖_result.png", "フレゴール_山嶺_7_小砦魔・聖堂無_result.png", "フレゴール_山嶺_9_野営地発狂・遺跡眠_result.png", "フレゴール_山嶺_9_野営地無・聖堂聖_result.png", "フレゴール_山嶺_9_野営地無・聖堂無_result.png", "フレゴール_腐れ森_2_野営地無・遺跡雷_result.png", "フレゴール_腐れ森_2_野営地雷・遺跡死_result.png", "フレゴール_腐れ森_4_野営地炎・聖堂無_result.png", "フレゴール_腐れ森_7_野営地発狂・小砦無_result.png", "フレゴール_腐れ森_8_野営地炎・聖堂炎_result.png", "マリス_なし_1_小砦無・遺跡聖_result.png", "マリス_なし_1_野営地発狂・聖堂炎_result.png", "マリス_なし_1_野営地雷・遺跡毒_result.png", "マリス_なし_2_小砦無・遺跡聖_result.png", "マリス_なし_3_遺跡死・小砦無_result.png", "マリス_なし_3_聖堂炎・野営地炎_result.png", "マリス_なし_3_聖堂無・遺跡無_result.png", "マリス_なし_3_野営地炎・遺跡聖_result.png", "マリス_なし_4_野営地炎・小砦無_result.png", "マリス_なし_5_野営地雷・遺跡毒_result.png", "マリス_なし_6_遺跡血・小砦魔_result.png", "マリス_なし_6_遺跡聖・遺跡魔_result.png", "マリス_なし_6_遺跡毒・野営地炎_result.png", "マリス_なし_7_遺跡眠・聖堂聖_result.png", "マリス_なし_7_遺跡無・小砦無_result.png", "マリス_なし_7_小砦無・聖堂無_result.png", "マリス_なし_8_野営地炎・野営地発狂_result.png", "マリス_なし_8_野営地発狂・遺跡毒_result.png", "マリス_なし_9_遺跡死・聖堂炎_result.png", "マリス_なし_9_小砦無・聖堂炎_result.png", "マリス_ノクラテオ_1_遺跡眠・野営地炎_result.png", "マリス_ノクラテオ_1_野営地無・遺跡血_result.png", "マリス_ノクラテオ_4_小砦無・野営地無_result.png", "マリス_ノクラテオ_6_聖堂無・野営地無_result.png", "マリス_ノクラテオ_7_野営地雷・聖堂聖_result.png", "マリス_火口_1_野営地炎・塔_result.png", "マリス_火口_5_遺跡血・塔_result.png", "マリス_火口_5_野営地炎・塔_result.png", "マリス_火口_6_小砦無・塔_result.png", "マリス_火口_8_小砦無・遺跡毒_result.png", "マリス_山嶺_3_小砦無・遺跡魔_result.png", "マリス_山嶺_3_野営地炎・聖堂炎_result.png", "マリス_山嶺_6_遺跡無・小砦無_result.png", "マリス_山嶺_6_小砦無・野営地炎_result.png", "マリス_山嶺_9_野営地無・聖堂無_result.png", "マリス_腐れ森_1_遺跡死・野営地炎_result.png", "マリス_腐れ森_2_小砦無・遺跡眠_result.png", "マリス_腐れ森_3_遺跡血・小砦魔_result.png", "マリス_腐れ森_3_聖堂無・野営地無_result.png", "マリス_腐れ森_8_聖堂無・野営地無_result.png", "リブラ_なし_1_野営地炎・遺跡無_result.png", "リブラ_なし_2_遺跡雷・遺跡毒_result.png", "リブラ_なし_2_小砦無・野営地炎_result.png", "リブラ_なし_2_聖堂無・遺跡血_result.png", "リブラ_なし_3_遺跡死・聖堂無_result.png", "リブラ_なし_3_小砦無・野営地無_result.png", "リブラ_なし_4_遺跡死・野営地無_result.png", "リブラ_なし_4_遺跡聖・遺跡魔_result.png", "リブラ_なし_4_遺跡氷・遺跡毒_result.png", "リブラ_なし_4_聖堂炎・野営地無_result.png", "リブラ_なし_5_小砦無・遺跡氷_result.png", "リブラ_なし_5_野営地無・野営地炎_result.png", "リブラ_なし_5_野営地雷・聖堂無_result.png", "リブラ_なし_6_遺跡雷・野営地炎_result.png", "リブラ_なし_6_塔_result.png", "リブラ_なし_7_遺跡魔・小砦魔_result.png", "リブラ_なし_7_野営地雷・小砦無_result.png", "リブラ_なし_8_遺跡氷・野営地炎_result.png", "リブラ_なし_9_遺跡氷・野営地発狂_result.png", "リブラ_なし_9_塔魔・遺跡雷_result.png", "リブラ_ノクラテオ_1_遺跡毒・野営地発狂_result.png", "リブラ_ノクラテオ_4_遺跡眠・野営地炎_result.png", "リブラ_ノクラテオ_5_遺跡血・小砦魔_result.png"
+    ];
+
     let userSelection = { boss: null, cataclysm: null, spawnPoint: null, location: null };
-    const steps = { boss: document.getElementById('step1-boss-selection'), cataclysm: document.getElementById('step2-cataclysm-selection'), spawn: document.getElementById('step3-spawn-selection'), location: document.getElementById('step4-location-selection'), result: document.getElementById('step5-result') };
+
+    // (DOM要素の取得は省略)
+    const steps = {
+        boss: document.getElementById('step1-boss-selection'),
+        cataclysm: document.getElementById('step2-cataclysm-selection'),
+        spawn: document.getElementById('step3-spawn-selection'),
+        location: document.getElementById('step4-location-selection'),
+        result: document.getElementById('step5-result')
+    };
     const bossIconsContainer = document.getElementById('boss-icons');
     const cataclysmIconsContainer = document.getElementById('cataclysm-icons');
     const spawnMapContainer = document.getElementById('spawn-map-container');
@@ -29,12 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultFilename = document.getElementById('result-filename');
     const resetButton = document.getElementById('reset-button');
     const backButtons = document.querySelectorAll('.back-button');
-    const adjustmentButton = document.getElementById('adjustment-mode-button');
-    const coordOutput = document.getElementById('coordinate-output');
-    let isAdjustmentMode = false;
 
-    // ★★★ ここから下に関数の定義をすべてまとめる ★★★
-
+    // --- 関数の定義 ---
+    
     function createIconGrid(container, items, type) {
         container.innerHTML = '';
         items.forEach(item => {
@@ -85,6 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const [number, coords] of Object.entries(SPAWN_POINTS_COORDS)) {
             const point = document.createElement('div');
             point.className = 'spawn-point';
+            // 数字は表示しない
+            // point.textContent = number; 
             point.style.top = coords.top;
             point.style.left = coords.left;
             point.dataset.spawn = number;
@@ -94,37 +105,50 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function handleSpawnPointClick(event) {
         const target = event.target.closest('.spawn-point');
-        if (!target || isAdjustmentMode) return;
+        if (!target) return;
         userSelection.spawnPoint = target.dataset.spawn;
-        findAndDisplayLocationOptions();
+        findAndDisplayLocationOptions(); 
     }
 
-    // findAndDisplayLocationOptions は、お客様のファイルリストを組み込んだ完成版に後で差し替えます
-    async function findAndDisplayLocationOptions() {
-        alert("（仮）拠点情報絞り込み機能");
-        const dummyLocations = ["聖堂炎・遺跡雷", "野営地無・遺跡雷", "小砦魔・塔無"];
+    function findAndDisplayLocationOptions() {
+        const { boss, cataclysm, spawnPoint } = userSelection;
+        if (!boss || !cataclysm || !spawnPoint) return;
+
+        const prefix = `${boss}_${cataclysm}_${spawnPoint}_`;
+        const matchedFiles = ALL_MAP_FILES.filter(file => file.startsWith(prefix));
+
         locationOptionsContainer.innerHTML = '';
-        dummyLocations.forEach(location => {
-            const button = document.createElement('button');
-            button.className = 'location-button';
-            button.textContent = location;
-            button.dataset.filename = `DUMMY_${location}.png`;
-            locationOptionsContainer.appendChild(button);
-        });
+
+        if (matchedFiles.length === 0) {
+            locationOptionsContainer.textContent = '該当するマップパターンが見つかりませんでした。';
+        } else {
+            matchedFiles.forEach(filename => {
+                const locationPart = filename.substring(prefix.length, filename.lastIndexOf('_result.png'));
+                
+                const button = document.createElement('button');
+                button.className = 'location-button';
+                button.textContent = locationPart;
+                button.dataset.filename = filename;
+                locationOptionsContainer.appendChild(button);
+            });
+        }
         showStep('location');
     }
 
     function handleLocationClick(event) {
         const target = event.target.closest('.location-button');
         if (!target) return;
+
         const filename = target.dataset.filename;
+        
         resultMapImage.src = `images/maps/${filename}`;
         resultFilename.textContent = filename;
+
         resultMapImage.onerror = () => {
-            resultMapImage.alt = "画像が見つかりません";
-            resultFilename.textContent = `エラー: ${filename} は見つかりませんでした。`;
+            resultMapImage.alt = "指定されたマップ画像が見つかりませんでした。";
+            resultFilename.textContent = `エラー: ${filename} は見つかりませんでした。ファイル名や選択が正しいか確認してください。`;
         };
-        resultMapImage.onload = () => { resultMapImage.alt = `マップ: ${filename}`; };
+        resultMapImage.onload = () => { resultMapImage.alt = `特定されたマップ: ${filename}`; };
         showStep('result');
     }
 
@@ -138,90 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
         showStep(targetStep);
     }
 
-    function toggleAdjustmentMode() {
-        isAdjustmentMode = !isAdjustmentMode;
-        const spawnPoints = spawnMapContainer.querySelectorAll('.spawn-point');
-        
-        if (isAdjustmentMode) {
-            adjustmentButton.textContent = '位置調整モードを終了';
-            adjustmentButton.style.backgroundColor = '#f44336';
-            spawnPoints.forEach(point => {
-                point.style.cursor = 'grab';
-                makeDraggable(point);
-            });
-            updateCoordOutput();
-        } else {
-            adjustmentButton.textContent = 'ドラッグで位置調整モードを開始';
-            adjustmentButton.style.backgroundColor = '#4CAF50';
-            spawnPoints.forEach(point => {
-                point.style.cursor = 'pointer';
-                // ドラッグイベントを削除（簡単のためページリロードでリセットする方針）
-            });
-        }
-    }
+    // --- イベントリスナーの設定 ---
+    bossIconsContainer.addEventListener('click', handleIconClick);
+    cataclysmIconsContainer.addEventListener('click', handleIconClick);
+    spawnMapContainer.addEventListener('click', handleSpawnPointClick);
+    locationOptionsContainer.addEventListener('click', handleLocationClick);
+    resetButton.addEventListener('click', resetAll);
+    backButtons.forEach(button => button.addEventListener('click', handleBackClick));
 
-    function makeDraggable(element) {
-        let offsetX, offsetY;
-        function onMouseDown(e) {
-            e.preventDefault();
-            element.classList.add('dragging');
-            offsetX = e.clientX - element.getBoundingClientRect().left;
-            offsetY = e.clientY - element.getBoundingClientRect().top;
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp, { once: true });
-        }
-        function onMouseMove(e) {
-            const containerRect = spawnMapContainer.getBoundingClientRect();
-            let newLeft = e.clientX - containerRect.left - offsetX;
-            let newTop = e.clientY - containerRect.top - offsetY;
-            newLeft = Math.max(0, Math.min(newLeft, containerRect.width - element.offsetWidth));
-            newTop = Math.max(0, Math.min(newTop, containerRect.height - element.offsetHeight));
-            element.style.left = `${newLeft}px`;
-            element.style.top = `${newTop}px`;
-        }
-        function onMouseUp() {
-            element.classList.remove('dragging');
-            document.removeEventListener('mousemove', onMouseMove);
-            updateCoordOutput();
-        }
-        element.addEventListener('mousedown', onMouseDown);
-    }
-
-    function updateCoordOutput() {
-        let outputText = 'const SPAWN_POINTS_COORDS = {\n';
-        const spawnPoints = spawnMapContainer.querySelectorAll('.spawn-point');
-        const containerRect = spawnMapContainer.getBoundingClientRect();
-        const sortedPoints = Array.from(spawnPoints).sort((a, b) => parseInt(a.dataset.spawn) - parseInt(b.dataset.spawn));
-        
-        sortedPoints.forEach(point => {
-            const pointNumber = point.dataset.spawn;
-            const pointRect = point.getBoundingClientRect();
-            const centerX = pointRect.left - containerRect.left + (pointRect.width / 2);
-            const centerY = pointRect.top - containerRect.top + (pointRect.height / 2);
-            const leftPercent = ((centerX / containerRect.width) * 100).toFixed(1);
-            const topPercent = ((centerY / containerRect.height) * 100).toFixed(1);
-            outputText += `    ${pointNumber}: { top: '${topPercent}%', left: '${leftPercent}%' },\n`;
-        });
-        outputText += '};';
-        coordOutput.textContent = outputText;
-    }
-
-    // --- 初期化 & イベントリスナー設定 ---
+    // --- 初期化実行 ---
     function initialize() {
         createIconGrid(bossIconsContainer, BOSSES, 'boss');
         createIconGrid(cataclysmIconsContainer, CATACLYSMS, 'cataclysm');
-
-        bossIconsContainer.addEventListener('click', handleIconClick);
-        cataclysmIconsContainer.addEventListener('click', handleIconClick);
-        spawnMapContainer.addEventListener('click', handleSpawnPointClick);
-        locationOptionsContainer.addEventListener('click', handleLocationClick);
-        resetButton.addEventListener('click', resetAll);
-        backButtons.forEach(button => button.addEventListener('click', handleBackClick));
-        adjustmentButton.addEventListener('click', toggleAdjustmentMode);
-        
         showStep('boss');
     }
-
-    // ★★★ 最後に初期化を実行する ★★★
     initialize();
 });

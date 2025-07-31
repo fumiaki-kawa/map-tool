@@ -222,35 +222,3 @@ h1, h2 {
 #reset-button:hover {
     background-color: #ffd700;
 }
-/* --- 調整モード用のスタイル --- */
-#adjustment-controls {
-    margin-bottom: 15px;
-    padding: 10px;
-    background-color: #222;
-    border-radius: 5px;
-    text-align: center;
-}
-#adjustment-mode-button {
-    background-color: #4CAF50; /* Green */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-.coord-output {
-    background-color: #111;
-    color: #0f0; /* Green text */
-    font-family: monospace;
-    padding: 10px;
-    border-radius: 3px;
-    white-space: pre;
-    text-align: left;
-    min-height: 100px;
-}
-/* ドラッグ中の円のスタイル */
-.spawn-point.dragging {
-    background-color: rgba(255, 0, 0, 0.7) !important; /* ドラッグ中は赤色に */
-    cursor: grabbing;
-}
