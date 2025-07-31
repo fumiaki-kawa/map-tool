@@ -171,13 +171,15 @@ h1, h2 {
     background-color: #555;
     color: #f0f0f0;
     border: 1px solid #666;
-    padding: 12px 20px;
+    padding: 16px 20px; /* ★ 上下の余白を 12px -> 16px に増やして、ボタンを太くする */
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
     width: 80%;
-    max-width: 400px;
+    max-width: 500px; /* ★ 最大幅も少し広げる (400px -> 500px) */
     text-align: center;
+    font-size: 1.1em; /* ★ 文字の大きさを標準の1.1倍にする */
+    font-weight: bold; /* ★ 文字を太字にして、さらに見やすくする */
 }
 
 .location-button:hover {
