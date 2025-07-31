@@ -94,28 +94,32 @@ h1, h2 {
     padding: 10px;
     border-radius: 5px;
     transition: background-color 0.3s, border-color 0.3s;
-    width: 120px;
+    /* ★ アイコン全体の横幅を 120px -> 145px に拡大 */
+    width: 200px; 
 }
 
 .icon-item:hover {
-    background-color: #454545;
+    background-color: #000000;
     border-color: #e0b45c;
 }
 
 .icon-item img {
-    width: 80px;
-    height: 80px;
+    /* ★ 画像自体の大きさを 80x80px -> 100x100px に拡大 */
+    width: 115px;
+    height: 115px;
     object-fit: contain;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #000000; /* ★★★ 完全な黒色に変更 ★★★ */
     border-radius: 5px;
     padding: 5px;
 }
 
 .icon-item p {
-    margin: 5px 0 0 0;
+    margin: 8px 0 0 0; /* ★ 画像との間隔を少し広げる */
     color: #ddd;
+    /* ★ 文字の大きさを少し大きくして、太字にする */
+    font-size: 1.1em;
+    font-weight: bold;
 }
-
 #spawn-map-container {
     position: relative;
     max-width: 100%;
