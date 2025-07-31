@@ -110,48 +110,59 @@ document.addEventListener('DOMContentLoaded', () => {
         findAndDisplayLocationOptions(); 
     }
 
-    function findAndDisplayLocationOptions() {
-        const { boss, cataclysm, spawnPoint } = userSelection;
-        if (!boss || !cataclysm || !spawnPoint) return;
+function findAndDisplayLocationOptions() {
+    const { boss, cataclysm, spawnPoint } = userSelection;
+    if (!boss || !cataclysm || !spawnPoint) return;
 
-        const prefix = `${boss}_${cataclysm}_${spawnPoint}_`;
-        const matchedFiles = ALL_MAP_FILES.filter(file => file.startsWith(prefix));
+    const prefix = `${boss}_${cataclysm}_${spawnPoint}_`;
+    const matchedFiles = ALL_MAP_FILES.filter(file => file.startsWith(prefix));
 
-        locationOptionsContainer.innerHTML = '';
+    locationOptionsContainer.innerHTML = '';
 
-        if (matchedFiles.length === 0) {
-            locationOptionsContainer.textContent = '該当するマップパターンが見つかりませんでした。';
-        } else {
-            matchedFiles.forEach(filename => {
-                const locationPart = filename.substring(prefix.length, filename.lastIndexOf('_result.png'));
-                
-                const button = document.createElement('button');
-                button.className = 'location-button';
-                button.textContent = locationPart;
-                button.dataset.filename = filename;
-                locationOptionsContainer.appendChild(button);
-            });
-        }
-        showStep('location');
+    if (matchedFiles.length === 0) {
+        locationOptionsContainer.textContent = '該当するマップパターンが見つかりませんでした。';
+    } else {
+        matchedFiles.forEach(filename => {
+            const locationPart = filename.substring(prefix.length, filename.lastIndexOf('_result.png'));
+            
+            // --- 新しい表示ロジック ---
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'location-item';
+            itemDiv.dataset.filename = filename;
+
+            const img = document.createElement('img');
+            img.src = `images/previews/${filename}`; // previewsフォルダから画像を取得
+            img.alt = `プレビュー: ${locationPart}`;
+
+            const p = document.createElement('p');
+p.textContent = locationPart.replace(/_/g, ' ');
+
+            itemDiv.appendChild(img);
+            itemDiv.appendChild(p);
+            locationOptionsContainer.appendChild(itemDiv);
+        });
     }
+    showStep('location');
+}
 
-    function handleLocationClick(event) {
-        const target = event.target.closest('.location-button');
-        if (!target) return;
+function handleLocationClick(event) {
+    // クリックされたのがボタンではなく、新しいコンテナになる
+    const target = event.target.closest('.location-item'); 
+    if (!target) return;
 
-        const filename = target.dataset.filename;
-        
-        resultMapImage.src = `images/maps/${filename}`;
-        resultFilename.textContent = filename;
+    const filename = target.dataset.filename;
+    
+    // (以降の処理は変更なし)
+    resultMapImage.src = `images/maps/${filename}`;
+    resultFilename.textContent = filename;
 
-        resultMapImage.onerror = () => {
-            resultMapImage.alt = "指定されたマップ画像が見つかりませんでした。";
-            resultFilename.textContent = `エラー: ${filename} は見つかりませんでした。ファイル名や選択が正しいか確認してください。`;
-        };
-        resultMapImage.onload = () => { resultMapImage.alt = `特定されたマップ: ${filename}`; };
-        showStep('result');
-    }
-
+    resultMapImage.onerror = () => {
+        resultMapImage.alt = "指定されたマップ画像が見つかりませんでした。";
+        resultFilename.textContent = `エラー: ${filename} は見つかりませんでした。ファイル名や選択が正しいか確認してください。`;
+    };
+    resultMapImage.onload = () => { resultMapImage.alt = `特定されたマップ: ${filename}`; };
+    showStep('result');
+}
     function resetAll() {
         userSelection = { boss: null, cataclysm: null, spawnPoint: null, location: null };
         showStep('boss');
