@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- データ定義 ---
     const BOSSES = ["アデレ", "カリゴ", "フレゴール", "グラディウス", "グノスター", "ナメレス", "リブラ", "マリス"];
     const CATACLYSMS = ["なし", "ノクラテオ", "火口", "山嶺", "腐れ森"];
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         9: { top: '53.5%', left: '77.1%' }
     };
 
-    // ★★★ お客様から頂いた最新の全ファイルリスト ★★★
+    // お客様の全ファイルリスト
     const ALL_MAP_FILES = [
         { filename: "processed_アデレ_なし_1_聖堂無・小砦無.png", memo: "" },
         { filename: "processed_アデレ_なし_1_野営地無・遺跡雷.png", memo: "" },
@@ -333,15 +333,17 @@ document.addEventListener('DOMContentLoaded', () => {
         { filename: "processed_リブラ_腐れ森_3_聖堂無・遺跡血.png", memo: "" },
         { filename: "processed_リブラ_腐れ森_3_遺跡眠・聖堂炎.png", memo: "" },
         { filename: "processed_リブラ_腐れ森_7_遺跡眠・聖堂炎.png", memo: "" },
-        { filename: "processed_リブラ_腐れ森_8_野営地無・聖堂聖.png", memo: "" }
+          { filename: "processed_リブラ_腐れ森_8_野営地無・聖堂聖.png", memo: "" }
     ];
-    let userSelection = { boss: null, cataclysm: null, spawnPoint: null, location: null };
+
+    // --- DOM要素の取得 ---
+    let userSelection = { boss: null, cataclysm: null, spawnPoint: null };
     const steps = {
-        boss: document.getElementById('step1-boss-selection'),
-        cataclysm: document.getElementById('step2-cataclysm-selection'),
-        spawn: document.getElementById('step3-spawn-selection'),
-        location: document.getElementById('step4-location-selection'),
-        result: document.getElementById('step5-result')
+        step1: document.getElementById('step1-boss-selection'),
+        step2: document.getElementById('step2-cataclysm-selection'),
+        step3: document.getElementById('step3-spawn-selection'),
+        step4: document.getElementById('step4-location-selection'),
+        step5: document.getElementById('step5-result')
     };
     const bossIconsContainer = document.getElementById('boss-icons');
     const cataclysmIconsContainer = document.getElementById('cataclysm-icons');
@@ -354,7 +356,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('reset-button');
     const backButtons = document.querySelectorAll('.back-button');
 
+    // --- 関数の定義 ---
     function createIconGrid(container, items, type) {
+        if (!container) return;
         container.innerHTML = '';
         items.forEach(item => {
             const div = document.createElement('div');
@@ -373,10 +377,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showStep(stepName) {
-        Object.values(steps).forEach(step => step.classList.remove('active'));
-        if (steps[stepName]) {
-            steps[stepName].classList.add('active');
+    function showStep(stepId) {
+        Object.values(steps).forEach(step => {
+            if(step) step.classList.remove('active');
+        });
+        const targetStep = document.getElementById(stepId);
+        if(targetStep) {
+            targetStep.classList.add('active');
         }
     }
 
@@ -392,12 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
         target.classList.add('selected');
         if (type === 'boss') {
             userSelection.boss = name;
-            showStep('cataclysm');
+            showStep('step2-cataclysm-selection');
         } else if (type === 'cataclysm') {
             userSelection.cataclysm = name;
             spawnMapImage.src = `images/spawn-maps/${name}.png`;
             createSpawnPoints();
-            showStep('spawn');
+            showStep('step3-spawn-selection');
         }
     }
 
@@ -445,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 locationOptionsContainer.appendChild(itemDiv);
             });
         }
-        showStep('location');
+        showStep('step4-location-selection');
     }
 
     function handleLocationClick(event) {
@@ -453,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!target) return;
         const filename = target.dataset.filename;
         const fileObject = ALL_MAP_FILES.find(f => f.filename === filename);
-        const memo = (fileObject && fileObject.memo) ? fileObject.memo : "詳細情報はありません。";
+        const memo = (fileObject && fileObject.memo && fileObject.memo.trim() !== "") ? fileObject.memo : "詳細情報はありません。";
         resultMapImage.src = `images/maps/${filename}`;
         resultFilename.textContent = filename;
         resultMemoElement.textContent = memo;
@@ -462,31 +469,61 @@ document.addEventListener('DOMContentLoaded', () => {
             resultFilename.textContent = `エラー: ${filename} は見つかりませんでした。ファイル名や選択が正しいか確認してください。`;
         };
         resultMapImage.onload = () => { resultMapImage.alt = `特定されたマップ: ${filename}`; };
-        showStep('result');
+        showStep('step5-result');
     }
 
     function resetAll() {
         document.querySelectorAll('.icon-item.selected').forEach(item => item.classList.remove('selected'));
-        userSelection = { boss: null, cataclysm: null, spawnPoint: null, location: null };
-        showStep('boss');
+        userSelection = { boss: null, cataclysm: null, spawnPoint: null };
+        showStep('step1-boss-selection');
     }
 
     function handleBackClick(event) {
-        const targetStep = event.target.dataset.step;
-        showStep(targetStep);
+        const targetStepId = event.target.dataset.step;
+        showStep(targetStepId);
     }
     
-    bossIconsContainer.addEventListener('click', handleIconClick);
-    cataclysmIconsContainer.addEventListener('click', handleIconClick);
-    spawnMapContainer.addEventListener('click', handleSpawnPointClick);
-    locationOptionsContainer.addEventListener('click', handleLocationClick);
-    resetButton.addEventListener('click', resetAll);
-    backButtons.forEach(button => button.addEventListener('click', handleBackClick));
-
+    // --- 初期化 & イベントリスナー設定 ---
     function initialize() {
         createIconGrid(bossIconsContainer, BOSSES, 'boss');
         createIconGrid(cataclysmIconsContainer, CATACLYSMS, 'cataclysm');
-        showStep('boss');
+        
+        bossIconsContainer.addEventListener('click', handleIconClick);
+        cataclysmIconsContainer.addEventListener('click', handleIconClick);
+        spawnMapContainer.addEventListener('click', handleSpawnPointClick);
+        locationOptionsContainer.addEventListener('click', handleLocationClick);
+        resetButton.addEventListener('click', resetAll);
+        backButtons.forEach(button => button.addEventListener('click', handleBackClick));
+
+        showStep('step1-boss-selection');
     }
+    
     initialize();
-});
+    // ===============================================
+    // ★ 3. モーダル（ライトボックス）機能 ★
+    // ===============================================
+    const modalContainer = document.getElementById('modal-container');
+    const modalImage = document.getElementById('modal-image');
+    const closeModalButton = document.querySelector('.modal-close-button');
+
+    // 結果のマップ画像がクリックされた時の処理
+    resultMapImage.addEventListener('click', () => {
+        if (resultMapImage.src) { // 画像が読み込まれていれば
+            modalContainer.classList.add('show');
+            modalImage.src = resultMapImage.src;
+        }
+    });
+
+    // 「×」ボタンがクリックされた時の処理
+    closeModalButton.addEventListener('click', () => {
+        modalContainer.classList.remove('show');
+    });
+
+    // 背景がクリックされた時も閉じる
+    modalContainer.addEventListener('click', (event) => {
+        if (event.target === modalContainer) {
+            modalContainer.classList.remove('show');
+        }
+    });
+
+}); // ← この行が、元々のファイルの一番最後の行です

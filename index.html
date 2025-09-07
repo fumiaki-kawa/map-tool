@@ -20,7 +20,7 @@
         <section id="step2-cataclysm-selection" class="step">
             <div class="step-header">
                 <h2>STEP 2: 地変を選択してください</h2>
-                <button class="back-button" data-step="boss">← ボス選択に戻る</button>
+                <button class="back-button" data-step="step1-boss-selection">← ボス選択に戻る</button>
             </div>
             <div id="cataclysm-icons" class="icon-grid"></div>
         </section>
@@ -28,7 +28,7 @@
         <section id="step3-spawn-selection" class="step">
             <div class="step-header">
                 <h2>STEP 3: マップ上のリスポーン位置を選択してください</h2>
-                <button class="back-button" data-step="cataclysm">← 地変選択に戻る</button>
+                <button class="back-button" data-step="step2-cataclysm-selection">← 地変選択に戻る</button>
             </div>
             <div id="spawn-map-container">
                 <img id="spawn-map-image" src="" alt="リスポーン位置マップ">
@@ -38,7 +38,7 @@
         <section id="step4-location-selection" class="step">
             <div class="step-header">
                 <h2>STEP 4: 拠点の組み合わせを選択してください</h2>
-                <button class="back-button" data-step="spawn">← リスポーン位置選択に戻る</button>
+                <button class="back-button" data-step="step3-spawn-selection">← リスポーン位置選択に戻る</button>
             </div>
             <div id="location-options"></div>
         </section>
@@ -59,6 +59,14 @@
             <p>マップデータ準備・監修: [お客様のお名前やID]</p>
         </footer>
     </div>
+    <script src="script.js"></script>
+    <!-- ★★★ モーダルウィンドウ（ライトボックス）用のHTML ★★★ -->
+    <div id="modal-container" class="modal">
+        <span class="modal-close-button">&times;</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+    <!-- ★★★ ここまで ★★★ -->
+
     <script src="script.js"></script>
 </body>
 </html>
